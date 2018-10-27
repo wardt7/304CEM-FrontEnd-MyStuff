@@ -1,0 +1,20 @@
+body {
+    background-color: #DCDCDC;
+}
+
+#Header {
+    position: static;
+}
+#Search {
+    position: relative;
+    background-color: #F5F5F5;
+    margin: auto;
+    top: 7em;
+    width: 90%;
+    padding: 0.375em 0.875em;
+    border-style: solid;
+    border-width: 0.175em;
+    border-radius: 0.25em;
+    /* w3schools box shadow tutorial, reference this */
+    box-shadow: 0 0.25em 0.5em 0 rgba(0, 0, 0, 0.2), 0 0.375em 1.25em 0 rgba(0, 0, 0, 0.19) 
+}
