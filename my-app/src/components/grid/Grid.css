@@ -1,0 +1,13 @@
+.card {
+    display: inline-block;
+    text-align: center;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+    margin-top: 0.25em;
+}
+
+.grid {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
