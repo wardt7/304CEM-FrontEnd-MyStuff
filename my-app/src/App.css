@@ -4,7 +4,6 @@ body {
 
 #Header {
     position: static;
-    z-index: 1;
 }
 #Search {
     position: relative;
