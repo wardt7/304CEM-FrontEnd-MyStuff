@@ -11,6 +11,12 @@ import testImage from './test1.jpg'
 // eslint-enable no-unusued-vars
 
 class App extends Component {
+    constructor(props){
+	super(props)
+	this.state = {
+	    currentModal: "none"
+	}
+    }
     onSearch (term) {
 	console.log('search on term:' + term)
     }
@@ -18,8 +24,14 @@ class App extends Component {
 	console.log('showing full product with id:' + id)
     }
     render () {
+	let currentModal
+	if(this.state.currentModal === "none"){
+	    // no modal so we just shove in a div
+	    currentModal = <div></div>
+	}
 	return (
 		<div>
+		{currentModal}
 		<div id="Header">
 		<Header title="Classified Ads" logo={reactLogo} onSearchClick={this.onSearch}/>
 		<a href="#default" className="logo">{this.props.title}</a>
