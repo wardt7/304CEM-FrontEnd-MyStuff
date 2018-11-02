@@ -3,12 +3,13 @@ import React, { Component } from 'react'
 import './App.css'
 import Header from './components/header/Header'
 import Search from './components/search/Search'
-import ProductCard from './components/productCard/ProductCard'
+import ProductModal from './components/productModal/ProductModal'
 import Grid from './components/grid/Grid'
 import Data from './Data'
 import reactLogo from './logo.svg'
-import testImage from './test1.jpg'
 // eslint-enable no-unusued-vars
+
+var clickedProductID = null
 
 class App extends Component {
     constructor(props){
@@ -16,18 +17,37 @@ class App extends Component {
 	this.state = {
 	    currentModal: "none"
 	}
+	this.onProductClick = this.onProductClick.bind(this)
     }
     onSearch (term) {
 	console.log('search on term:' + term)
     }
     onProductClick (id) {
 	console.log('showing full product with id:' + id)
+	this.setState({currentModal: "product"})
+	clickedProductID = id
+    }
+    onModalExitClick(){
+	this.setState({currentModal: "none"})
+    }
+    searchForProduct(id){
+	let toReturn = null
+	let items = Data.items
+	items.forEach(function(element) {
+	    if(element.id === id){
+		toReturn = element
+	    }
+	})
+	return(toReturn)
     }
     render () {
 	let currentModal
 	if(this.state.currentModal === "none"){
 	    // no modal so we just shove in a div
 	    currentModal = <div></div>
+	} else if(this.state.currentModal === "product") {
+	    let product = this.searchForProduct(clickedProductID)
+	    currentModal = <ProductModal product={product} />
 	}
 	return (
 		<div>
