@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import './App.css'
 import Header from './components/header/Header'
 import Search from './components/search/Search'
-import ProductModal from './components/productModal/ProductModal'
+import Modal from './components/modal/Modal'
 import Grid from './components/grid/Grid'
 import Data from './Data'
 import reactLogo from './logo.svg'
@@ -48,7 +48,7 @@ class App extends Component {
 	    currentModal = <div></div>
 	} else if(this.state.currentModal === "product") {
 	    let product = this.searchForProduct(clickedProductID)
-	    currentModal = <ProductModal product={product} onModalExitClick={this.onModalExitClick}/>
+	    currentModal = <Modal type={this.state.currentModal} product={product} onModalExitClick={this.onModalExitClick}/>
 	}
 	return (
 		<div>
