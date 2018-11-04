@@ -18,6 +18,7 @@ class App extends Component {
 	    currentModal: "none"
 	}
 	this.onProductClick = this.onProductClick.bind(this)
+	this.onModalExitClick = this.onModalExitClick.bind(this)
     }
     onSearch (term) {
 	console.log('search on term:' + term)
@@ -47,7 +48,7 @@ class App extends Component {
 	    currentModal = <div></div>
 	} else if(this.state.currentModal === "product") {
 	    let product = this.searchForProduct(clickedProductID)
-	    currentModal = <ProductModal product={product} />
+	    currentModal = <ProductModal product={product} onModalExitClick={this.onModalExitClick}/>
 	}
 	return (
 		<div>
