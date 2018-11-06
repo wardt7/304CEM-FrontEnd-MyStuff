@@ -19,6 +19,7 @@ class App extends Component {
 	}
 	this.onProductClick = this.onProductClick.bind(this)
 	this.onModalExitClick = this.onModalExitClick.bind(this)
+	this.onSignupClick = this.onSignupClick.bind(this)
     }
     onSearch (term) {
 	console.log('search on term:' + term)
@@ -27,6 +28,9 @@ class App extends Component {
 	console.log('showing full product with id:' + id)
 	this.setState({currentModal: "product"})
 	clickedProductID = id
+    }
+    onSignupClick(){
+	this.setState({currentModal: "signup"})
     }
     onModalExitClick(){
 	this.setState({currentModal: "none"})
@@ -49,12 +53,14 @@ class App extends Component {
 	} else if(this.state.currentModal === "product") {
 	    let product = this.searchForProduct(clickedProductID)
 	    currentModal = <Modal type={this.state.currentModal} product={product} onModalExitClick={this.onModalExitClick}/>
+	} else if(this.state.currentModal === "signup") {
+	    currentModal = <Modal type={this.state.currentModal}/>
 	}
 	return (
 		<div>
 		{currentModal}
 		<div id="Header">
-		<Header title="Classified Ads" logo={reactLogo} onSearchClick={this.onSearch}/>
+		<Header title="Classified Ads" logo={reactLogo} onSearchClick={this.onSearch} onSignup={this.onSignupClick}/>
 		<a href="#default" className="logo">{this.props.title}</a>
                 </div>
                 <div id="Search">
