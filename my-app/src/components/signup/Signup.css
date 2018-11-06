@@ -1,0 +1,18 @@
+.signupForm p {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.signupForm button {
+    display: block;
+    margin: auto;
+    margin-top: 0.5em;
+    padding: 0.25em;
+    font-size: 1.25em;
+}
+
+.error {
+    color: red;
+}
+

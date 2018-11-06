@@ -54,7 +54,7 @@ class App extends Component {
 	    let product = this.searchForProduct(clickedProductID)
 	    currentModal = <Modal type={this.state.currentModal} product={product} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "signup") {
-	    currentModal = <Modal type={this.state.currentModal}/>
+	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
 	}
 	return (
 		<div>

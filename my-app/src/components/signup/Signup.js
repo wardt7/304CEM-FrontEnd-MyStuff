@@ -11,7 +11,7 @@ class Signup extends Component {
 	let SignupSchema = Yup.object().shape({
 	email: Yup.string().email('Invalid email').required('Required'),
 	password: Yup.string().min(2, 'Too Short!').max(16, 'Too Long!').required('Required'),
-	rePassword: Yup.string().min(2, 'Too Short!').max(16, 'Too Long!').required('Required').oneOf([Yup.ref('password'), null])
+	    rePassword: Yup.string().min(2, 'Too Short!').max(16, 'Too Long!').required('Required').oneOf([Yup.ref('password'),null], "Passwords don't match!")
     })
 	return (
 		<div className="Signup">
@@ -20,18 +20,21 @@ class Signup extends Component {
 		    console.log(values)
 		}}>
 		{({errors, touched}) => (
-			<Form>
-			<Field name="email" type="email" />
+			<Form className="signupForm">
+			<p>Email:</p>
+			<Field className="entry" name="email" type="email" />
 			{errors.email && touched.email ? (
-				<div>{errors.email}</div>
+				<div className="error">{errors.email}</div>
 			) : null}
-			<Field name="password" type="password" />
+		        <p>Password:</p>
+			<Field className="entry" name="password" type="password" />
 			{errors.password && touched.password ? (
-				<div>{errors.password}</div>
+				<div className="error">{errors.password}</div>
 			) : null}
-			<Field name="rePassword" type="password" />
+		        <p>Re-enter Password:</p>
+			<Field className="entry" name="rePassword" type="password" />
 			{errors.rePassword && touched.password ? (
-				<div>{errors.rePassword}</div>
+				<div className="error">{errors.rePassword}</div>
 			) : null}
 			<button type="submit">Submit</button>
 			</Form>
