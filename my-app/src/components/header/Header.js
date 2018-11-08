@@ -11,6 +11,10 @@ class Header extends Component {
 	this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
         this.handleTextChange = this.handleTextChange.bind(this)
         this.handleSignup = this.handleSignup.bind(this)
+	this.handleLogin = this.handleLogin.bind(this)
+    }
+    handleLogin(event){
+	this.props.onLogin()
     }
     handleSignup(event){
 	this.props.onSignup()
@@ -28,6 +32,7 @@ class Header extends Component {
 		<img src={this.props.logo} alt="React logo"/><a href="#default" className="logo">{this.props.title} </a>
 		<div className="header-right">
                 <button onClick={this.handleSignup}>Sign Up!</button>
+		<button onClick={this.handleLogin}>Login</button>
 		<div className="search-container">
                 <form action="">
                 <input type="text" placeholder="Search.." name="txtSearch" onChange={this.handleTextChange} value={this.state.searchTerm} />

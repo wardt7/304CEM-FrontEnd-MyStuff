@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './Modal.css'
 import ProductModal from '../productModal/ProductModal'
 import Signup from '../signup/Signup'
+import Login from '../login/Login'
 
 class Modal extends Component {
     constructor(props){
@@ -21,8 +22,9 @@ class Modal extends Component {
 	if(this.props.type === "product"){
 	    content = <ProductModal product={this.props.product} />
 	} else if(this.props.type === "signup"){
-	    console.log("Making signup")
 	    content = <Signup />
+	} else if(this.props.type === "login"){
+	    content = <Login />
 	}
 	return (
 		<div className="modal" onClick={this.handleModalExitClick}>

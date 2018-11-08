@@ -20,6 +20,7 @@ class App extends Component {
 	this.onProductClick = this.onProductClick.bind(this)
 	this.onModalExitClick = this.onModalExitClick.bind(this)
 	this.onSignupClick = this.onSignupClick.bind(this)
+	this.onLoginClick = this.onLoginClick.bind(this)
     }
     onSearch (term) {
 	console.log('search on term:' + term)
@@ -31,6 +32,9 @@ class App extends Component {
     }
     onSignupClick(){
 	this.setState({currentModal: "signup"})
+    }
+    onLoginClick(){
+	this.setState({currentModal: "login"})
     }
     onModalExitClick(){
 	this.setState({currentModal: "none"})
@@ -55,12 +59,14 @@ class App extends Component {
 	    currentModal = <Modal type={this.state.currentModal} product={product} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "signup") {
 	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
+	} else if(this.state.currentModal === "login") {
+	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
 	}
 	return (
 		<div>
 		{currentModal}
 		<div id="Header">
-		<Header title="Classified Ads" logo={reactLogo} onSearchClick={this.onSearch} onSignup={this.onSignupClick}/>
+		<Header title="Classified Ads" logo={reactLogo} onSearchClick={this.onSearch} onSignup={this.onSignupClick} onLogin={this.onLoginClick}/>
 		<a href="#default" className="logo">{this.props.title}</a>
                 </div>
                 <div id="Search">
