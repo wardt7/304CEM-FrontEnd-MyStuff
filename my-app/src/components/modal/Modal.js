@@ -3,6 +3,7 @@ import './Modal.css'
 import ProductModal from '../productModal/ProductModal'
 import Signup from '../signup/Signup'
 import Login from '../login/Login'
+import ProductUpload from '../productUpload/ProductUpload'
 
 class Modal extends Component {
     constructor(props){
@@ -25,6 +26,8 @@ class Modal extends Component {
 	    content = <Signup />
 	} else if(this.props.type === "login"){
 	    content = <Login />
+	} else if(this.props.type === "productUpload"){
+	    content = <ProductUpload />
 	}
 	return (
 		<div className="modal" onClick={this.handleModalExitClick}>

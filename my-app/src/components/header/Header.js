@@ -12,13 +12,17 @@ class Header extends Component {
         this.handleTextChange = this.handleTextChange.bind(this)
         this.handleSignup = this.handleSignup.bind(this)
 	this.handleLogin = this.handleLogin.bind(this)
+	this.handleProductUpload = this.handleProductUpload.bind(this)
     }
     handleLogin(event){
 	this.props.onLogin()
     }
     handleSignup(event){
 	this.props.onSignup()
-    }    
+    }
+    handleProductUpload(event){
+	this.props.onProduct()
+    }
     handleSearchSubmit (event) {
         event.preventDefault()
         this.props.onSearchClick(this.state.searchTerm)
@@ -33,6 +37,7 @@ class Header extends Component {
 		<div className="header-right">
                 <button onClick={this.handleSignup}>Sign Up!</button>
 		<button onClick={this.handleLogin}>Login</button>
+		<button onClick={this.handleProductUpload}>Upload</button>
 		<div className="search-container">
                 <form action="">
                 <input type="text" placeholder="Search.." name="txtSearch" onChange={this.handleTextChange} value={this.state.searchTerm} />
