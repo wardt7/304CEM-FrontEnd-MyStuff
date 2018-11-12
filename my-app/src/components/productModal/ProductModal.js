@@ -8,10 +8,10 @@ class ProductModal extends Component {
     render () {
 	return (
 		<div className="productModal">
-		<p className="productModalName">{this.props.product.productName}</p>
-		<img src={this.props.product.productImg} alt="No Image Avalable :(" />
-		<p className="productModalPrice">Price: £{this.props.product.productPrice}</p>
-		<p className="productModalLocation">Location: {this.props.product.productLocation}</p>
+		<p className="productModalName">{this.props.product.title}</p>
+		<img src={this.props.product.links[0].href} alt="No Image Avalable :(" />
+		<p className="productModalPrice">Price: £{this.props.product.price}</p>
+		<p className="productModalLocation">Location: {this.props.product.location}</p>
 		</div>
 	)
     }

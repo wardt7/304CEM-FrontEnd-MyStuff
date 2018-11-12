@@ -14,12 +14,12 @@ class Grid extends Component {
 	return(
 	    <div>
 		{cards.map((item, index) =>
-			   <div className="card" key={item.id}>
-			   <ProductCard productID={item.id}
-			   productName={item.productName}
-			   productImg={item.productImg}
-			   productPrice={item.productPrice}
-			   productLocation={item.productLocation}
+			   <div className="card" key={item.productID}>
+			   <ProductCard productID={item.productID}
+			   productName={item.title}
+			   productImg={item.links[0].href}
+			   productPrice={item.price}
+			   productLocation={item.location}
 			   onProductClick={this.props.onProductClick}/>
 			   </div>
 			  )}

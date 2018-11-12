@@ -1,11 +1,11 @@
 // eslint-disable no-unusued-vars
 import React, { Component } from 'react'
+import axios from 'axios'
 import './App.css'
 import Header from './components/header/Header'
 import Search from './components/search/Search'
 import Modal from './components/modal/Modal'
 import Grid from './components/grid/Grid'
-import Data from './Data'
 import reactLogo from './logo.svg'
 // eslint-enable no-unusued-vars
 
@@ -15,13 +15,30 @@ class App extends Component {
     constructor(props){
 	super(props)
 	this.state = {
-	    currentModal: "none"
+	    currentModal: "none",
+	    products: {
+		"content": []
+	    }
 	}
 	this.onProductClick = this.onProductClick.bind(this)
 	this.onModalExitClick = this.onModalExitClick.bind(this)
 	this.onSignupClick = this.onSignupClick.bind(this)
 	this.onLoginClick = this.onLoginClick.bind(this)
 	this.onProductUploadClick = this.onProductUploadClick.bind(this)
+	this.fetchProducts = this.fetchProducts.bind(this)
+    }
+    fetchProducts(){
+	axios.get('http://localhost:8080/products')
+	    .then(response => {
+		this.setState({currentModal: this.state.currentModal, products: response.data})
+		return response.data
+	    })
+	    .catch(response => {
+		return response.data
+	    })
+    }
+    componentDidMount(){
+	this.fetchProducts()
     }
     onSearch (term) {
 	console.log('search on term:' + term)
@@ -45,9 +62,9 @@ class App extends Component {
     }
     searchForProduct(id){
 	let toReturn = null
-	let items = Data.items
+	let items = this.state.products.content
 	items.forEach(function(element) {
-	    if(element.id === id){
+	    if(element.productID === id){
 		toReturn = element
 	    }
 	})
@@ -63,7 +80,7 @@ class App extends Component {
 	    currentModal = <Modal type={this.state.currentModal} product={product} onModalExitClick={this.onModalExitClick}/>
 	} else {
 	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
-	}  
+	}
 	return (
 		<div>
 		{currentModal}
@@ -73,7 +90,7 @@ class App extends Component {
                 </div>
                 <div id="Search">
                 <Search onSearchClick={this.onSearch} />
-		<Grid items={Data.items} onProductClick={this.onProductClick} />
+		<Grid items={this.state.products.content} onProductClick={this.onProductClick} />
                 </div>
                 </div>
 	)
