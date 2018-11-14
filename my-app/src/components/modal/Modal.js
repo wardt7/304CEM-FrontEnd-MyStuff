@@ -23,7 +23,7 @@ class Modal extends Component {
 	if(this.props.type === "product"){
 	    content = <ProductModal product={this.props.product} />
 	} else if(this.props.type === "signup"){
-	    content = <Signup />
+	    content = <Signup onSignup={this.props.onSignup}/>
 	} else if(this.props.type === "login"){
 	    content = <Login />
 	} else if(this.props.type === "productUpload"){

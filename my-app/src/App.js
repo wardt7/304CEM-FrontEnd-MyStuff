@@ -10,12 +10,14 @@ import reactLogo from './logo.svg'
 // eslint-enable no-unusued-vars
 
 var clickedProductID = null
+var apiUrl = 'http://localhost:8080'
 
 class App extends Component {
     constructor(props){
 	super(props)
 	this.state = {
 	    currentModal: "none",
+	    jwt: null,
 	    products: {
 		"content": []
 	    }
@@ -26,15 +28,44 @@ class App extends Component {
 	this.onLoginClick = this.onLoginClick.bind(this)
 	this.onProductUploadClick = this.onProductUploadClick.bind(this)
 	this.fetchProducts = this.fetchProducts.bind(this)
+	this.sendSignUp = this.sendSignUp.bind(this)
     }
     fetchProducts(){
-	axios.get('http://localhost:8080/products')
+	axios.get(`${apiUrl}/products`)
 	    .then(response => {
 		this.setState({currentModal: this.state.currentModal, products: response.data})
 		return response.data
 	    })
 	    .catch(response => {
 		return response.data
+	    })
+    }
+    sendSignUp(values){
+	console.log(values)
+	let bodyFormData = new FormData()
+	bodyFormData.set('email', values.email)
+	bodyFormData.set('username', values.username)
+	bodyFormData.set('password', values.password)
+	bodyFormData.set('rePassword', values.rePassword)
+	console.log(bodyFormData)
+	axios({
+	    method: 'post',
+	    url: `${apiUrl}/users`,
+	    data: values,
+	    config: { headers: {'Access-Control-Allow-Origin': '*','Content-Type': 'application/json'}}
+	})
+	    .then(response => {
+		if(response.status === 200){
+		    this.setState({jwt: response.data.token})
+		    console.log(this.state)
+		} else {
+		    console.log('error in receiving')
+		    console.log(response)
+		}
+	    })
+	    .catch(response => {
+		console.log('error in sending')
+		console.log(response)
 	    })
     }
     componentDidMount(){
@@ -78,6 +109,8 @@ class App extends Component {
 	} else if(this.state.currentModal === "product") {
 	    let product = this.searchForProduct(clickedProductID)
 	    currentModal = <Modal type={this.state.currentModal} product={product} onModalExitClick={this.onModalExitClick}/>
+	} else if(this.state.currentModal === "signup") {
+	    currentModal = <Modal type={this.state.currentModal} onSignup={this.sendSignUp} onModalExitClick={this.onModalExitClick}/>
 	} else {
 	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
 	}
