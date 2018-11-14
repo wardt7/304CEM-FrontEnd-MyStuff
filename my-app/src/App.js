@@ -17,7 +17,7 @@ class App extends Component {
 	super(props)
 	this.state = {
 	    currentModal: "none",
-	    jwt: null,
+	    jwt: false,
 	    products: {
 		"content": []
 	    }
@@ -42,12 +42,6 @@ class App extends Component {
     }
     sendSignUp(values){
 	console.log(values)
-	let bodyFormData = new FormData()
-	bodyFormData.set('email', values.email)
-	bodyFormData.set('username', values.username)
-	bodyFormData.set('password', values.password)
-	bodyFormData.set('rePassword', values.rePassword)
-	console.log(bodyFormData)
 	axios({
 	    method: 'post',
 	    url: `${apiUrl}/users`,
@@ -56,8 +50,9 @@ class App extends Component {
 	})
 	    .then(response => {
 		if(response.status === 200){
-		    this.setState({jwt: response.data.token})
-		    console.log(this.state)
+		    sessionStorage.setItem('token', response.data.token)
+		    this.setState({jwt: true})
+		    console.log(sessionStorage.getItem('token'))
 		} else {
 		    console.log('error in receiving')
 		    console.log(response)
