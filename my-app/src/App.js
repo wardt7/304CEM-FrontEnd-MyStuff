@@ -29,6 +29,7 @@ class App extends Component {
 	this.onProductUploadClick = this.onProductUploadClick.bind(this)
 	this.fetchProducts = this.fetchProducts.bind(this)
 	this.sendSignUp = this.sendSignUp.bind(this)
+	this.sendLogin = this.sendLogin.bind(this)
     }
     fetchProducts(){
 	axios.get(`${apiUrl}/products`)
@@ -41,7 +42,6 @@ class App extends Component {
 	    })
     }
     sendSignUp(values){
-	console.log(values)
 	axios({
 	    method: 'post',
 	    url: `${apiUrl}/users`,
@@ -52,14 +52,30 @@ class App extends Component {
 		if(response.status === 200){
 		    sessionStorage.setItem('token', response.data.token)
 		    this.setState({jwt: true})
-		    console.log(sessionStorage.getItem('token'))
 		} else {
-		    console.log('error in receiving')
 		    console.log(response)
 		}
 	    })
 	    .catch(response => {
-		console.log('error in sending')
+		console.log(response)
+	    })
+    }
+    sendLogin(values){
+	axios({
+	    method: 'post',
+	    url: `${apiUrl}/users/login`,
+	    data: values,
+	    config: { headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}}
+	})
+	    .then(response => {
+		if(response.status === 200){
+		    sessionStorage.setItem('token', response.data.token)
+		    this.setState({jwt: true})
+		} else {
+		    console.log(response)
+		}
+	    })
+	    .catch(response => {
 		console.log(response)
 	    })
     }
@@ -106,6 +122,8 @@ class App extends Component {
 	    currentModal = <Modal type={this.state.currentModal} product={product} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "signup") {
 	    currentModal = <Modal type={this.state.currentModal} onSignup={this.sendSignUp} onModalExitClick={this.onModalExitClick}/>
+	} else if(this.state.currentModal === "login") {
+	    currentModal = <Modal type={this.state.currentModal} onLogin={this.sendLogin} onModalExitClick={this.onModalExitClick}/>
 	} else {
 	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
 	}
