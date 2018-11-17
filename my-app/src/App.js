@@ -83,14 +83,16 @@ class App extends Component {
     sendMessage(values){
 	var token = sessionStorage.getItem('token')
         console.log(token)
-	axios({
-	    method: 'post',
-	    url: `${apiUrl}/messages`,
-	    data: values,
-	    config: { headers: {'Authorization': token, 'Content-Type': 'application/json'}}
+	fetch(`${apiUrl}/messages`, {
+	    method: "POST",
+	    headers: {
+		"Content-Type": "application/json; charset=utf-8",
+		"Authorization": token
+	    },
+	    body: JSON.stringify(values)
 	})
 	    .then(response => {
-		if(response.status === 200){
+		if(response.status === 201){
 		    console.log('Message sent successfully')
 		} else {
 		    console.log(response.request)

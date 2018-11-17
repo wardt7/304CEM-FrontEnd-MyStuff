@@ -25,7 +25,6 @@ class MessageSend extends Component {
 			fromUser: payload.username,
 			subject: values.subject,
 			content: values.content,
-			auth: token
 		    }
 		    console.log(newValues)
 		    this.props.sendMessage(newValues)
