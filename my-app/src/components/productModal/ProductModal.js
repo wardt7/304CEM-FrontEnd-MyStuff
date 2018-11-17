@@ -4,6 +4,10 @@ import './ProductModal.css'
 class ProductModal extends Component {
     constructor(props){
 	super(props)
+	this.sendMessage = this.sendMessage.bind(this)
+    }
+    sendMessage(){
+	this.props.onSendMessage(this.props.product.author)
     }
     render () {
 	return (
@@ -14,6 +18,7 @@ class ProductModal extends Component {
 		<p className="productModalPrice">Price: £{this.props.product.price}</p>
 		<p className="productModalLocation">Location: {this.props.product.location}</p>
 		<p className="productModalAuthor">Seller: {this.props.product.author}</p>
+		<button onClick={this.sendMessage}>Send a message to the seller</button>
 		</div>
 	)
     }

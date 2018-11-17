@@ -17,7 +17,7 @@ class App extends Component {
 	super(props)
 	this.state = {
 	    currentModal: "none",
-	    jwt: false,
+	    toUser: null,
 	    products: {
 		"content": []
 	    }
@@ -27,9 +27,11 @@ class App extends Component {
 	this.onSignupClick = this.onSignupClick.bind(this)
 	this.onLoginClick = this.onLoginClick.bind(this)
 	this.onProductUploadClick = this.onProductUploadClick.bind(this)
+	this.onSendMessageClick = this.onSendMessageClick.bind(this)
 	this.fetchProducts = this.fetchProducts.bind(this)
 	this.sendSignUp = this.sendSignUp.bind(this)
 	this.sendLogin = this.sendLogin.bind(this)
+	this.sendMessage = this.sendMessage.bind(this)
     }
     fetchProducts(){
 	axios.get(`${apiUrl}/products`)
@@ -46,12 +48,12 @@ class App extends Component {
 	    method: 'post',
 	    url: `${apiUrl}/users`,
 	    data: values,
+            withCredentials: true,
 	    config: { headers: {'Access-Control-Allow-Origin': '*','Content-Type': 'application/json'}}
 	})
 	    .then(response => {
 		if(response.status === 200){
 		    sessionStorage.setItem('token', response.data.token)
-		    this.setState({jwt: true})
 		} else {
 		    console.log(response)
 		}
@@ -70,13 +72,32 @@ class App extends Component {
 	    .then(response => {
 		if(response.status === 200){
 		    sessionStorage.setItem('token', response.data.token)
-		    this.setState({jwt: true})
 		} else {
 		    console.log(response)
 		}
 	    })
 	    .catch(response => {
 		console.log(response)
+	    })
+    }
+    sendMessage(values){
+	var token = sessionStorage.getItem('token')
+        console.log(token)
+	axios({
+	    method: 'post',
+	    url: `${apiUrl}/messages`,
+	    data: values,
+	    config: { headers: {'Authorization': token, 'Content-Type': 'application/json'}}
+	})
+	    .then(response => {
+		if(response.status === 200){
+		    console.log('Message sent successfully')
+		} else {
+		    console.log(response.request)
+		}
+	    })
+	    .catch(response => {
+                console.log(response.request)
 	    })
     }
     componentDidMount(){
@@ -102,6 +123,9 @@ class App extends Component {
     onModalExitClick(){
 	this.setState({currentModal: "none"})
     }
+    onSendMessageClick(toSendTo){
+	this.setState({currentModal: "sendMessage", toUser: toSendTo})
+    }
     searchForProduct(id){
 	let toReturn = null
 	let items = this.state.products.content
@@ -119,11 +143,13 @@ class App extends Component {
 	    currentModal = <div></div>
 	} else if(this.state.currentModal === "product") {
 	    let product = this.searchForProduct(clickedProductID)
-	    currentModal = <Modal type={this.state.currentModal} product={product} onModalExitClick={this.onModalExitClick}/>
+	    currentModal = <Modal type={this.state.currentModal} product={product} onSendMessage={this.onSendMessageClick} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "signup") {
 	    currentModal = <Modal type={this.state.currentModal} onSignup={this.sendSignUp} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "login") {
 	    currentModal = <Modal type={this.state.currentModal} onLogin={this.sendLogin} onModalExitClick={this.onModalExitClick}/>
+	} else if(this.state.currentModal === "sendMessage"){
+	    currentModal = <Modal type={this.state.currentModal} sendMessage={this.sendMessage} toUser={this.state.toUser} onModalExitClick={this.onModalExitClick}/>
 	} else {
 	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
 	}

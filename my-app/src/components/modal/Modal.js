@@ -4,6 +4,7 @@ import ProductModal from '../productModal/ProductModal'
 import Signup from '../signup/Signup'
 import Login from '../login/Login'
 import ProductUpload from '../productUpload/ProductUpload'
+import MessageSend from '../messageSend/MessageSend'
 
 class Modal extends Component {
     constructor(props){
@@ -21,11 +22,13 @@ class Modal extends Component {
     render () {
 	let content = null;
 	if(this.props.type === "product"){
-	    content = <ProductModal product={this.props.product} />
+	    content = <ProductModal product={this.props.product} onSendMessage={this.props.onSendMessage} />
 	} else if(this.props.type === "signup"){
 	    content = <Signup onSignup={this.props.onSignup}/>
 	} else if(this.props.type === "login"){
 	    content = <Login onLogin={this.props.onLogin}/>
+	} else if(this.props.type === "sendMessage"){
+	    content = <MessageSend sendMessage={this.props.sendMessage} toUser={this.props.toUser}/>
 	} else if(this.props.type === "productUpload"){
 	    content = <ProductUpload />
 	}
