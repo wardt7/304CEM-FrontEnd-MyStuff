@@ -1,0 +1,39 @@
+.messageCard {
+    margin-top: 0.5em;
+    margin-bottom: 0.25em;
+    background-color: #F5F5F5;
+    padding-left: 1em;
+    padding-right: 1em;
+    position: relative;
+    border-radius: 0.5em;
+    width: 90em;
+    height: 4em;
+    box-shadow: 0 0.25em 0.5em 0 rgba(0,0,0,0.2)
+}
+
+.messageCard:hover {
+    box-shadow: 0 0.5em 0.75em 0 rgba(0,0,0,0.3)
+}
+
+.messageCard:active {
+    box-shadow: 0 0.75em 1em 0 rgba(0,0,0,0.4)
+}
+
+.messageCard p {
+    font-size: 1.25em;
+}
+
+.messageFromUser {
+    float: left;
+    text-align: left;
+    width: 25%
+}
+
+.messageSubject {
+    float: left;
+    text-align: left;
+    width: 75%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

@@ -28,6 +28,7 @@ class App extends Component {
 	this.onLoginClick = this.onLoginClick.bind(this)
 	this.onProductUploadClick = this.onProductUploadClick.bind(this)
 	this.onSendMessageClick = this.onSendMessageClick.bind(this)
+	this.onViewMessageClick = this.onViewMessageClick.bind(this)
 	this.fetchProducts = this.fetchProducts.bind(this)
 	this.sendSignUp = this.sendSignUp.bind(this)
 	this.sendLogin = this.sendLogin.bind(this)
@@ -108,6 +109,9 @@ class App extends Component {
     onSearch (term) {
 	console.log('search on term:' + term)
     }
+    onViewMessageClick(){
+	this.setState({currentModal: "viewMessage"})
+    }
     onProductClick (id) {
 	console.log('showing full product with id:' + id)
 	this.setState({currentModal: "product"})
@@ -152,6 +156,8 @@ class App extends Component {
 	    currentModal = <Modal type={this.state.currentModal} onLogin={this.sendLogin} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "sendMessage"){
 	    currentModal = <Modal type={this.state.currentModal} sendMessage={this.sendMessage} toUser={this.state.toUser} onModalExitClick={this.onModalExitClick}/>
+	} else if(this.state.currentModal === "viewMessage"){
+	    currentModal = <Modal type={this.state.currentModal} apiUrl={apiUrl} onModalExitClick={this.onModalExitClick} />
 	} else {
 	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
 	}
@@ -159,7 +165,7 @@ class App extends Component {
 		<div>
 		{currentModal}
 		<div id="Header">
-		<Header title="Classified Ads" logo={reactLogo} onSearchClick={this.onSearch} onSignup={this.onSignupClick} onLogin={this.onLoginClick} onProduct={this.onProductUploadClick}/>
+		<Header title="Classified Ads" logo={reactLogo} onSearchClick={this.onSearch} onSignup={this.onSignupClick} onLogin={this.onLoginClick} onProduct={this.onProductUploadClick} onViewMessage={this.onViewMessageClick}/>
 		<a href="#default" className="logo">{this.props.title}</a>
                 </div>
                 <div id="Search">
