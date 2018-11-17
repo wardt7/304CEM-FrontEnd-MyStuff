@@ -5,9 +5,30 @@ class ProductModal extends Component {
     constructor(props){
 	super(props)
 	this.sendMessage = this.sendMessage.bind(this)
+	this.checkToken = this.checkToken.bind(this)
     }
     sendMessage(){
 	this.props.onSendMessage(this.props.product.author)
+    }
+    checkToken(){
+	// Display a send message button if the user has a token and it isnt their product
+	var token = sessionStorage.getItem('token')
+	if(token === null){
+	    return (
+		    <div></div>
+	    )
+	} else {
+	    var payload = JSON.parse(atob(token.split('.')[1]))
+	    if(payload.username === this.props.product.author){
+		return (
+			<div></div>
+		)
+	    } else {
+		return (
+			<button onClick={this.sendMessage}>Send a message to the seller</button>
+		)
+	    }
+	}
     }
     render () {
 	return (
@@ -18,7 +39,7 @@ class ProductModal extends Component {
 		<p className="productModalPrice">Price: £{this.props.product.price}</p>
 		<p className="productModalLocation">Location: {this.props.product.location}</p>
 		<p className="productModalAuthor">Seller: {this.props.product.author}</p>
-		<button onClick={this.sendMessage}>Send a message to the seller</button>
+		{this.checkToken()}
 		</div>
 	)
     }
