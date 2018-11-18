@@ -6,6 +6,7 @@ import Login from '../login/Login'
 import ProductUpload from '../productUpload/ProductUpload'
 import MessageSend from '../messageSend/MessageSend'
 import MessageViewGrid from '../messageViewGrid/MessageViewGrid'
+import MessageViewModal from '../messageViewModal/MessageViewModal'
 
 class Modal extends Component {
     constructor(props){
@@ -32,8 +33,10 @@ class Modal extends Component {
 	    content = <MessageSend sendMessage={this.props.sendMessage} toUser={this.props.toUser}/>
 	} else if(this.props.type === "productUpload"){
 	    content = <ProductUpload />
-	} else if(this.props.type == "viewMessage"){
-	    content = <MessageViewGrid apiUrl={this.props.apiUrl} />
+	} else if(this.props.type === "viewMessage"){
+	    content = <MessageViewGrid messages={this.props.messages} fetchMessages={this.props.fetchMessages} onViewIndividualMessage={this.props.onViewIndividualMessage} />
+	} else if(this.props.type === "viewIndividualMessage"){
+	    content = <MessageViewModal message={this.props.message} />
 	}
 	return (
 		<div className="modal" onClick={this.handleModalExitClick}>

@@ -10,6 +10,7 @@ import reactLogo from './logo.svg'
 // eslint-enable no-unusued-vars
 
 var clickedProductID = null
+var clickedMessageID = null
 var apiUrl = 'http://localhost:8080'
 
 class App extends Component {
@@ -20,6 +21,9 @@ class App extends Component {
 	    toUser: null,
 	    products: {
 		"content": []
+	    },
+	    messages: {
+		"content": []
 	    }
 	}
 	this.onProductClick = this.onProductClick.bind(this)
@@ -29,7 +33,9 @@ class App extends Component {
 	this.onProductUploadClick = this.onProductUploadClick.bind(this)
 	this.onSendMessageClick = this.onSendMessageClick.bind(this)
 	this.onViewMessageClick = this.onViewMessageClick.bind(this)
+	this.onViewIndividualMessageClick = this.onViewIndividualMessageClick.bind(this)
 	this.fetchProducts = this.fetchProducts.bind(this)
+	this.fetchMessages = this.fetchMessages.bind(this)
 	this.sendSignUp = this.sendSignUp.bind(this)
 	this.sendLogin = this.sendLogin.bind(this)
 	this.sendMessage = this.sendMessage.bind(this)
@@ -43,6 +49,35 @@ class App extends Component {
 	    .catch(response => {
 		return response.data
 	    })
+    }
+    fetchMessages(){
+	var componentThis = this
+	var token = sessionStorage.getItem('token')
+	if(token == null){
+	    return null
+	} else {
+	    var msgData = { content: [] }
+	    console.log(apiUrl)
+	    fetch(`${apiUrl}/messages`, {
+		method: "GET",
+		headers: {
+		    "Authorization": token
+		}
+	    })
+		.then(response => {
+		    if(response.status === 200){
+			response.json().then(function(data) {
+			    componentThis.setState({messages: data})
+			    console.log(data)
+			    console.log(componentThis.state.messages)
+			})
+		    }
+		})
+		.catch(function(err) {
+		    console.log('error')
+		})
+	}
+	console.log(this.state)
     }
     sendSignUp(values){
 	axios({
@@ -117,6 +152,10 @@ class App extends Component {
 	this.setState({currentModal: "product"})
 	clickedProductID = id
     }
+    onViewIndividualMessageClick (id) {
+	this.setState({currentModal: "viewIndividualMessage"})
+	clickedMessageID = id
+    }
     onProductUploadClick(){
 	this.setState({currentModal: "productUpload"})
     }
@@ -142,6 +181,17 @@ class App extends Component {
 	})
 	return(toReturn)
     }
+    searchForMessage(id){
+	let toReturn = null
+	let items = this.state.messages.content
+	let found = items.find(function(element){
+	    return element.messageID === id
+	})
+	if(found !== undefined){
+	    toReturn = found
+	}
+	return(toReturn)
+    }	    
     render () {
 	let currentModal
 	if(this.state.currentModal === "none"){
@@ -157,7 +207,11 @@ class App extends Component {
 	} else if(this.state.currentModal === "sendMessage"){
 	    currentModal = <Modal type={this.state.currentModal} sendMessage={this.sendMessage} toUser={this.state.toUser} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "viewMessage"){
-	    currentModal = <Modal type={this.state.currentModal} apiUrl={apiUrl} onModalExitClick={this.onModalExitClick} />
+	    currentModal = <Modal type={this.state.currentModal} messages={this.state.messages.content} fetchMessages={this.fetchMessages} onViewIndividualMessage={this.onViewIndividualMessageClick} onModalExitClick={this.onModalExitClick} />
+	} else if(this.state.currentModal === "viewIndividualMessage") {
+	    let message = this.searchForMessage(clickedMessageID)
+	    console.log(message)
+	    currentModal = <Modal type={this.state.currentModal} message={message} onModalExitClick={this.onModalExitClick}/>
 	} else {
 	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
 	}
