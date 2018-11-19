@@ -36,7 +36,7 @@ class Modal extends Component {
 	} else if(this.props.type === "viewMessage"){
 	    content = <MessageViewGrid messages={this.props.messages} fetchMessages={this.props.fetchMessages} onViewIndividualMessage={this.props.onViewIndividualMessage} />
 	} else if(this.props.type === "viewIndividualMessage"){
-	    content = <MessageViewModal message={this.props.message} />
+	    content = <MessageViewModal message={this.props.message} onSendMessage={this.props.onSendMessage} onViewMessage={this.props.onViewMessage} />
 	}
 	return (
 		<div className="modal" onClick={this.handleModalExitClick}>

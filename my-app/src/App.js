@@ -211,7 +211,7 @@ class App extends Component {
 	} else if(this.state.currentModal === "viewIndividualMessage") {
 	    let message = this.searchForMessage(clickedMessageID)
 	    console.log(message)
-	    currentModal = <Modal type={this.state.currentModal} message={message} onModalExitClick={this.onModalExitClick}/>
+	    currentModal = <Modal type={this.state.currentModal} message={message} onSendMessage={this.onSendMessageClick} onViewMessage={this.onViewMessageClick} onModalExitClick={this.onModalExitClick}/>
 	} else {
 	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
 	}
