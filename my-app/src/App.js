@@ -36,6 +36,7 @@ class App extends Component {
 	this.onViewIndividualMessageClick = this.onViewIndividualMessageClick.bind(this)
 	this.fetchProducts = this.fetchProducts.bind(this)
 	this.fetchMessages = this.fetchMessages.bind(this)
+	this.deleteMessage = this.deleteMessage.bind(this)
 	this.sendSignUp = this.sendSignUp.bind(this)
 	this.sendLogin = this.sendLogin.bind(this)
 	this.sendMessage = this.sendMessage.bind(this)
@@ -53,7 +54,7 @@ class App extends Component {
     fetchMessages(){
 	var componentThis = this
 	var token = sessionStorage.getItem('token')
-	if(token == null){
+	if(token === null){
 	    return null
 	} else {
 	    var msgData = { content: [] }
@@ -78,6 +79,36 @@ class App extends Component {
 		})
 	}
 	console.log(this.state)
+    }
+    deleteMessage(id){
+	var componentThis = this
+	var token = sessionStorage.getItem('token')
+	if(token === null){
+	    return null
+	} else {
+	    fetch(`${apiUrl}/messages/${id}`, {
+		method: "DELETE",
+		headers: {
+		    "Authorization": token
+		}
+	    })
+		.then(response => {
+		    if(response.status === 200){
+			var items = componentThis.state.messages.content
+			// Instead of refetching, just delete from the state the message client-side
+			for(var i = 0; i < items.length; i++) {
+			    if(items[i].messageID === id){
+				items.splice(i, 1)
+				break;
+			    }
+			}
+			componentThis.setState({"messages": { "content": items }, "currentModal":"viewMessage"})
+		    }
+		})
+		.catch(function(err) {
+		    console.log(err)
+		})
+	}
     }
     sendSignUp(values){
 	axios({
@@ -207,11 +238,11 @@ class App extends Component {
 	} else if(this.state.currentModal === "sendMessage"){
 	    currentModal = <Modal type={this.state.currentModal} sendMessage={this.sendMessage} toUser={this.state.toUser} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "viewMessage"){
-	    currentModal = <Modal type={this.state.currentModal} messages={this.state.messages.content} fetchMessages={this.fetchMessages} onViewIndividualMessage={this.onViewIndividualMessageClick} onModalExitClick={this.onModalExitClick} />
+	    currentModal = <Modal type={this.state.currentModal} messages={this.state.messages.content} fetchMessages={this.fetchMessages} deleteMessage={this.deleteMessage} onViewIndividualMessage={this.onViewIndividualMessageClick} onModalExitClick={this.onModalExitClick} />
 	} else if(this.state.currentModal === "viewIndividualMessage") {
 	    let message = this.searchForMessage(clickedMessageID)
 	    console.log(message)
-	    currentModal = <Modal type={this.state.currentModal} message={message} onSendMessage={this.onSendMessageClick} onViewMessage={this.onViewMessageClick} onModalExitClick={this.onModalExitClick}/>
+	    currentModal = <Modal type={this.state.currentModal} message={message} deleteMessage={this.deleteMessage} onSendMessage={this.onSendMessageClick} onViewMessage={this.onViewMessageClick} onModalExitClick={this.onModalExitClick}/>
 	} else {
 	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>
 	}

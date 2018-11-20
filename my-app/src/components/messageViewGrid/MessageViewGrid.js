@@ -21,7 +21,8 @@ class MessageViewGrid extends Component {
 			   messageFromUser={item.fromUser}
 			   messageSubject={item.subject}
 			   messageContent={item.content}
-			   onMessageClick={this.props.onViewIndividualMessage}/>
+			   onMessageClick={this.props.onViewIndividualMessage}
+			   deleteMessage={this.props.deleteMessage}/>
 			   </div>
 			  )}
 	    </div>

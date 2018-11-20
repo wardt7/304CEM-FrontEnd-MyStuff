@@ -3,7 +3,7 @@
     margin-bottom: 0.25em;
     background-color: #F5F5F5;
     padding-left: 1em;
-    padding-right: 1em;
+    padding-right: 0em;
     position: relative;
     border-radius: 0.5em;
     width: 90em;
@@ -32,8 +32,13 @@
 .messageSubject {
     float: left;
     text-align: left;
-    width: 75%;
+    width: 65%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.messageCard button {
+    margin-top: 0.625em;
+    font-size: 1.25em;
 }
