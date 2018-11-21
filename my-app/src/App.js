@@ -37,6 +37,7 @@ class App extends Component {
 	this.fetchProducts = this.fetchProducts.bind(this)
 	this.fetchMessages = this.fetchMessages.bind(this)
 	this.deleteMessage = this.deleteMessage.bind(this)
+	this.deleteProduct = this.deleteProduct.bind(this)
 	this.sendSignUp = this.sendSignUp.bind(this)
 	this.sendLogin = this.sendLogin.bind(this)
 	this.sendMessage = this.sendMessage.bind(this)
@@ -103,6 +104,36 @@ class App extends Component {
 			    }
 			}
 			componentThis.setState({"messages": { "content": items }, "currentModal":"viewMessage"})
+		    }
+		})
+		.catch(function(err) {
+		    console.log(err)
+		})
+	}
+    }
+    deleteProduct(id){
+	var componentThis = this
+	var token = sessionStorage.getItem('token')
+	if(token === null){
+	    return null
+	} else {
+	    fetch(`${apiUrl}/products/${id}`, {
+		method: "DELETE",
+		headers: {
+		    "Authorization": token
+		}
+	    })
+		.then(response => {
+		    if(response.status === 200){
+			var items = componentThis.state.products.content
+			// Instead of refetching, just delete from the state the product client-side
+			for(var i = 0; i < items.length; i++) {
+			    if(items[i].productID === id){
+				items.splice(i, 1)
+				break;
+			    }
+			}
+			componentThis.setState({"products": { "content": items }, "currentModal":"none"})
 		    }
 		})
 		.catch(function(err) {
@@ -230,7 +261,7 @@ class App extends Component {
 	    currentModal = <div></div>
 	} else if(this.state.currentModal === "product") {
 	    let product = this.searchForProduct(clickedProductID)
-	    currentModal = <Modal type={this.state.currentModal} product={product} onSendMessage={this.onSendMessageClick} onModalExitClick={this.onModalExitClick}/>
+	    currentModal = <Modal type={this.state.currentModal} product={product} deleteProduct={this.deleteProduct} onSendMessage={this.onSendMessageClick} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "signup") {
 	    currentModal = <Modal type={this.state.currentModal} onSignup={this.sendSignUp} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "login") {

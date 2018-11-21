@@ -5,13 +5,17 @@ class ProductModal extends Component {
     constructor(props){
 	super(props)
 	this.sendMessage = this.sendMessage.bind(this)
+	this.onDeleteProduct = this.onDeleteProduct.bind(this)
 	this.checkToken = this.checkToken.bind(this)
     }
     sendMessage(){
 	this.props.onSendMessage(this.props.product.author)
     }
+    onDeleteProduct(){
+	this.props.deleteProduct(this.props.product.productID)
+    }
     checkToken(){
-	// Display a send message button if the user has a token and it isnt their product
+	// Display a send message button if the user has a token and it isnt their product, and a delete message button if their username matches the author name
 	var token = sessionStorage.getItem('token')
 	if(token === null){
 	    return (
@@ -21,7 +25,7 @@ class ProductModal extends Component {
 	    var payload = JSON.parse(atob(token.split('.')[1]))
 	    if(payload.username === this.props.product.author){
 		return (
-			<div></div>
+			<button onClick={this.onDeleteProduct}>Delete this product</button>
 		)
 	    } else {
 		return (

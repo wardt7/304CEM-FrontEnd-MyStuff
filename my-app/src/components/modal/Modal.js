@@ -24,7 +24,7 @@ class Modal extends Component {
     render () {
 	let content = null;
 	if(this.props.type === "product"){
-	    content = <ProductModal product={this.props.product} onSendMessage={this.props.onSendMessage} />
+	    content = <ProductModal product={this.props.product} deleteProduct={this.props.deleteProduct} onSendMessage={this.props.onSendMessage} />
 	} else if(this.props.type === "signup"){
 	    content = <Signup onSignup={this.props.onSignup}/>
 	} else if(this.props.type === "login"){
