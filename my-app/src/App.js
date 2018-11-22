@@ -26,6 +26,7 @@ class App extends Component {
 		"content": []
 	    }
 	}
+	this.onSearch = this.onSearch.bind(this)
 	this.onProductClick = this.onProductClick.bind(this)
 	this.onModalExitClick = this.onModalExitClick.bind(this)
 	this.onSignupClick = this.onSignupClick.bind(this)
@@ -42,8 +43,12 @@ class App extends Component {
 	this.sendLogin = this.sendLogin.bind(this)
 	this.sendMessage = this.sendMessage.bind(this)
     }
-    fetchProducts(){
-	axios.get(`${apiUrl}/products`)
+    fetchProducts(value){
+	var url = `${apiUrl}/products/`
+	if(value !== null){
+	    url = url + `?title=${value}`
+	}
+	axios.get(url)
 	    .then(response => {
 		this.setState({currentModal: this.state.currentModal, products: response.data})
 		return response.data
@@ -201,10 +206,10 @@ class App extends Component {
 	    })
     }
     componentDidMount(){
-	this.fetchProducts()
+	this.fetchProducts(null)
     }
     onSearch (term) {
-	console.log('search on term:' + term)
+	this.fetchProducts(term)
     }
     onViewMessageClick(){
 	this.setState({currentModal: "viewMessage"})
