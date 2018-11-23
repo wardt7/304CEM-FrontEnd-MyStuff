@@ -9,6 +9,7 @@ class Header extends Component {
 	this.handleLogin = this.handleLogin.bind(this)
 	this.handleProductUpload = this.handleProductUpload.bind(this)
 	this.handleViewMessage = this.handleViewMessage.bind(this)
+	this.checkToken = this.checkToken.bind(this)
     }
     handleLogin(event){
 	event.preventDefault()
@@ -26,20 +27,36 @@ class Header extends Component {
 	event.preventDefault()
 	this.props.onViewMessage()
     }
-    render () {
+    checkToken(){
+	var token = sessionStorage.getItem('token')
+	console.log(token)
 	// eslint-disable
+	if(token !== null){
+	    return (
+		    <div className="header-right">
+		    <a href="#productUpload" onClick={this.handleProductUpload}>Upload Product</a>
+		    <a href="#viewMessage" onClick={this.handleViewMessage}>View Messages</a>
+		    </div>
+	    )
+	} else {
+	    return (
+		    <div className="header-right">
+		    <a href="#signup" onClick={this.handleSignup}>Sign Up!</a>
+		    <a href="#login" onClick={this.handleLogin}>Login</a>
+		    </div>
+	    )
+	}
+	// eslint-enable
+    }
+    render () {
+	var headerRight = this.checkToken()
         return (
 		<div className="header">
 		<img src={this.props.logo} alt="React logo"/><a href="#default" className="logo">{this.props.title} </a>
-		<div className="header-right">
-                <a href="#signup" onClick={this.handleSignup}>Sign Up!</a>
-		<a href="#login" onClick={this.handleLogin}>Login</a>
-		<a href="#productUpload" onClick={this.handleProductUpload}>Upload</a>
-		<a href="#viewMessage" onClick={this.handleViewMessage}>View Messages</a>
-		</div>
+		{headerRight}
 		</div>
 	)
-	// eslint-enable
+	
     }
 }
 export default Header
