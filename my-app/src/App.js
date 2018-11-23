@@ -286,7 +286,7 @@ class App extends Component {
 		<div>
 		{currentModal}
 		<div id="Header">
-		<Header title="Classified Ads" logo={reactLogo} onSearchClick={this.onSearch} onSignup={this.onSignupClick} onLogin={this.onLoginClick} onProduct={this.onProductUploadClick} onViewMessage={this.onViewMessageClick}/>
+		<Header title="MyStuff - The Classified Ad Site" logo={reactLogo} onSearchClick={this.onSearch} onSignup={this.onSignupClick} onLogin={this.onLoginClick} onProduct={this.onProductUploadClick} onViewMessage={this.onViewMessageClick}/>
 		<a href="#default" className="logo">{this.props.title}</a>
                 </div>
                 <div id="Search">

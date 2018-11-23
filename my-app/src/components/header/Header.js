@@ -5,53 +5,41 @@ import './Header.css'
 class Header extends Component {
     constructor (props) {
 	super(props)
-	this.state = {
-	    searchTerm: ''
-	}
-	this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
-        this.handleTextChange = this.handleTextChange.bind(this)
         this.handleSignup = this.handleSignup.bind(this)
 	this.handleLogin = this.handleLogin.bind(this)
 	this.handleProductUpload = this.handleProductUpload.bind(this)
 	this.handleViewMessage = this.handleViewMessage.bind(this)
     }
     handleLogin(event){
+	event.preventDefault()
 	this.props.onLogin()
     }
     handleSignup(event){
+	event.preventDefault()
 	this.props.onSignup()
     }
     handleProductUpload(event){
+	event.preventDefault()
 	this.props.onProduct()
     }
     handleViewMessage(event){
+	event.preventDefault()
 	this.props.onViewMessage()
     }
-    handleSearchSubmit (event) {
-        event.preventDefault()
-        this.props.onSearchClick(this.state.searchTerm)
-    }
-    handleTextChange (event) {
-        this.setState({ searchTerm: event.target.value })
-    }
     render () {
+	// eslint-disable
         return (
 		<div className="header">
 		<img src={this.props.logo} alt="React logo"/><a href="#default" className="logo">{this.props.title} </a>
 		<div className="header-right">
-                <button onClick={this.handleSignup}>Sign Up!</button>
-		<button onClick={this.handleLogin}>Login</button>
-		<button onClick={this.handleProductUpload}>Upload</button>
-		<button onClick={this.handleViewMessage}>View Messages</button>
-		<div className="search-container">
-                <form action="">
-                <input type="text" placeholder="Search.." name="txtSearch" onChange={this.handleTextChange} value={this.state.searchTerm} />
-                <button type="submit" onClick={this.handleSearchSubmit}>Search</button>
-		</form>
-		</div>
+                <a href="#signup" onClick={this.handleSignup}>Sign Up!</a>
+		<a href="#login" onClick={this.handleLogin}>Login</a>
+		<a href="#productUpload" onClick={this.handleProductUpload}>Upload</a>
+		<a href="#viewMessage" onClick={this.handleViewMessage}>View Messages</a>
 		</div>
 		</div>
 	)
+	// eslint-enable
     }
 }
 export default Header

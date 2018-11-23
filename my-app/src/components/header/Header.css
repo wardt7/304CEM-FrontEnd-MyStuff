@@ -2,11 +2,10 @@
     overflow: hidden;
     background-color: #05386b;
     padding: 1.25em 0.625em;
-    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1;
+    margin: 0;
 }
 
 .header a {
@@ -21,12 +20,13 @@
 }
 
 .header img {
-    width: 5em;
+    width: 3.5em;
     float: left;
 }
 
 .header a.logo {
     font-size: 1.5em;
+    line-height: 1em;
     font-weight: bold;
     text-align: center;
 }
@@ -41,39 +41,23 @@
     float: right;
 }
 
-.header .search-container {
+.header-right a {
     float: left;
+    margin-top: 0.25em;
+    margin-right: 0.125em;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    font-size: 1.25em;
+    text-decoration: none;
 }
 
-.header input[type=text] {
-    padding: 0.375em;
-    margin-top: 1em;
-    font-size: 0.875em;
-    border: none;
+.header-right a:hover {
+    background: #6495ED;
 }
 
-.header .search-container button, .header button {
-    float: right;
-    padding: 0.375em 0.625em;
-    margin-top: 1em;
-    margin-right: 2em;
-    background: #ddd;
-    font-size: 0.875em;
-    border: none;
-    cursor: pointer;
-}
-
-.header .search-container button:hover, .header button {
-    background: #ccc;
-}
-
-.header button {
-    padding: 0.625em 1.25em;
-    font-size: 1em;
-    margin-top: 0.5em;
-}
-
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1000px) {
     .header img{
 	display: block;
 	float: none;
@@ -82,6 +66,13 @@
     .header a {
 	float: none;
 	display: block;
+	text-align: center;
+    }
+
+    .header-right {
+	display: block;
+	float: none;
+	margin: auto;
 	text-align: center;
     }
 }
