@@ -44,6 +44,7 @@ class App extends Component {
 	this.sendSignUp = this.sendSignUp.bind(this)
 	this.sendLogin = this.sendLogin.bind(this)
 	this.sendMessage = this.sendMessage.bind(this)
+	this.sendProductUpload = this.sendProductUpload.bind(this)
     }
     fetchProducts(value){
 	var url = `${apiUrl}/products/`
@@ -227,6 +228,31 @@ class App extends Component {
                 toast.error('Oh no! There was a client-side error!')
 	    })
     }
+    sendProductUpload(values){
+	console.log(values)
+	var componentThis = this;
+	var token = sessionStorage.getItem('token')
+	fetch(`${apiUrl}/products`,{
+	    method: "POST",
+	    body: values,
+	    headers: {
+		"Authorization": token
+	    },
+	})
+	    .then(function (response) {
+		if (response.status === 201){
+		    componentThis.setState({"currentModal": "none"})
+		    toast.info("Successfully uploaded the product!")
+		    componentThis.fetchProducts(null)
+		} else {
+		    toast.error(`Oh no! There was an error! Error Code: ${response.status}`)
+		}
+	    })
+	    .catch(function (response) {
+		console.log(response)
+		toast.error('Oh no! There was a client-side error!')
+	    })
+    }
     componentDidMount(){
 	this.fetchProducts(null)
     }
@@ -293,6 +319,8 @@ class App extends Component {
 	} else if(this.state.currentModal === "product") {
 	    let product = this.searchForProduct(clickedProductID)
 	    currentModal = <Modal type={this.state.currentModal} product={product} deleteProduct={this.deleteProduct} onSendMessage={this.onSendMessageClick} onModalExitClick={this.onModalExitClick}/>
+	} else if(this.state.currentModal === "productUpload") {
+	    currentModal = <Modal type={this.state.currentModal} sendProductUpload={this.sendProductUpload} onModalExitClick={this.onModalExitClick} />
 	} else if(this.state.currentModal === "signup") {
 	    currentModal = <Modal type={this.state.currentModal} onSignup={this.sendSignUp} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "login") {

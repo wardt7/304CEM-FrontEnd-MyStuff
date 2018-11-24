@@ -10,27 +10,7 @@ class ProductUpload extends Component {
 	this.submitForm = this.submitForm.bind(this)
     }
     submitForm(values){
-	console.log('submitting form')
-	console.log(values)
-	axios.post('http://localhost:8080/products',{
-	    headers: {
-		'Access-Control-Allow-Origin': '*',
-		'Content-Type': 'multipart/form-data'
-	    },
-	    title: values.title,
-	    description: values.description,
-	    location: values.location,
-	    price: values.price,
-	    author: values.author,
-	    file: values.file
-	    
-	})
-	    .then(function (response) {
-		console.log(response)
-	    })
-	    .catch(function (error) {
-		console.log(error)
-	    })
+	this.props.sendProductUpload(values)
     }
     render(){
 	let UploadSchema = Yup.object().shape({
@@ -43,28 +23,15 @@ class ProductUpload extends Component {
 	return (
 		<div className="productUpload">
 		<h1>Product Upload</h1>
-		<Formik initialValues={{product: null, title: '', description: '', location: '', price: 0, author: 'admin'}} validationSchema={UploadSchema} onSubmit={(values) => {
-		    console.log('submitting form')
-		    console.log(values)
+		<Formik initialValues={{product: null, title: '', description: '', location: '', price: 0}} validationSchema={UploadSchema} onSubmit={(values) => {
 		    let bodyFormData = new FormData()
+		    console.log(values.product)
 		    bodyFormData.set('title', values.title)
 		    bodyFormData.set('description', values.description)
 		    bodyFormData.set('location', values.location)
 		    bodyFormData.set('price', values.price)
-		    bodyFormData.set('author', values.author)
 		    bodyFormData.append('product', values.product)
-		    axios({
-			method: 'post',
-			url: 'http://localhost:8080/products',
-			data: bodyFormData,
-			config: {headers: {'Access-Control-Allow-Origin': '*','Content-Type': 'multipart/form-data'}}
-		    })
-			.then(function (response) {
-			    console.log(response)
-			})
-			.catch(function (error) {
-			    console.log(error)
-			})
+		    this.submitForm(bodyFormData)
 		}}>
 		{({errors, touched, setFieldValue}) => (
 			<Form className="productUploadForm">
@@ -95,7 +62,6 @@ class ProductUpload extends Component {
 			{errors.price && touched.price ? (
 				<div className="error">{errors.price}</div>
 			) : null}
-		    <input type="hidden" name="author" value="admin" />
 		        <button type="submit">Submit</button>
 		        </Form>
 		)}
