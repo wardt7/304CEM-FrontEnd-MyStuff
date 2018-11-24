@@ -1,6 +1,8 @@
 // eslint-disable no-unusued-vars
 import React, { Component } from 'react'
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
 import './App.css'
 import Header from './components/header/Header'
 import Search from './components/search/Search'
@@ -48,13 +50,24 @@ class App extends Component {
 	if(value !== null){
 	    url = url + `?title=${value}`
 	}
-	axios.get(url)
+	var componentThis = this
+	fetch(url, {
+	    method: "GET",
+	})
 	    .then(response => {
-		this.setState({currentModal: this.state.currentModal, products: response.data})
-		return response.data
+		// XXX: We shouldn't be getting a 201, even though the server is set up to send a 200. WTF?
+		if(response.status === 200 || response.status === 201){
+		    response.json().then(function(data) {
+			componentThis.setState({products: data})
+		    })
+		} else {
+		    console.log(response.status)
+		    console.log(response)
+		    toast.error(`Oh no! There was an error! Error Code: ${response.status}`)
+		}
 	    })
 	    .catch(response => {
-		return response.data
+		toast.error('Oh no! There was a client-side error!')
 	    })
     }
     fetchMessages(){
@@ -75,13 +88,13 @@ class App extends Component {
 		    if(response.status === 200){
 			response.json().then(function(data) {
 			    componentThis.setState({messages: data})
-			    console.log(data)
-			    console.log(componentThis.state.messages)
 			})
+		    } else {
+			toast.error(`Oh no! There was an error! Error Code: ${response.status}`)
 		    }
 		})
 		.catch(function(err) {
-		    console.log('error')
+		    toast.error('Oh no! There was a client-side error!')
 		})
 	}
 	console.log(this.state)
@@ -109,10 +122,13 @@ class App extends Component {
 			    }
 			}
 			componentThis.setState({"messages": { "content": items }, "currentModal":"viewMessage"})
+			toast.info('Successfully deleted the message!')
+		    } else {
+			toast.error(`Oh no! There was an error! Error Code: ${response.status}`)
 		    }
 		})
 		.catch(function(err) {
-		    console.log(err)
+		    toast.error('Oh no! There was a client-side error!')
 		})
 	}
     }
@@ -139,12 +155,35 @@ class App extends Component {
 			    }
 			}
 			componentThis.setState({"products": { "content": items }, "currentModal":"none"})
+			toast.info('Successfully deleted the product!')
+		    } else {
+			toast.error(`Oh no! There was an error! Error Code: ${response.status}`)
 		    }
 		})
 		.catch(function(err) {
-		    console.log(err)
+		    toast.error('Oh no! There was a client-side error!')
 		})
 	}
+    }
+    sendLogin(values){
+	fetch({
+	    method: 'post',
+	    url: `${apiUrl}/users/login`,
+	    data: values,
+	    config: { headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}}
+	})
+	    .then(response => {
+		if(response.status === 200){
+		    sessionStorage.setItem('token', response.data.token)
+		    this.setState({'currentModal': 'none'})
+		    toast.info('Successfully logged in!')
+		} else {
+		    toast.error(`Oh no! There was an error! Error Code: ${response.status}`)
+		}
+	    })
+	    .catch(response => {
+		toast.error('Oh no! There was a client-side error!')
+	    })
     }
     sendSignUp(values){
 	axios({
@@ -155,37 +194,19 @@ class App extends Component {
 	    config: { headers: {'Access-Control-Allow-Origin': '*','Content-Type': 'application/json'}}
 	})
 	    .then(response => {
-		if(response.status === 200){
+		if(response.status === 201){
 		    sessionStorage.setItem('token', response.data.token)
-		} else {
-		    console.log(response)
+		    this.setState({'currentModal': 'none'})
+		    toast.info('Successfully signed up!')
 		}
 	    })
 	    .catch(response => {
-		console.log(response)
-	    })
-    }
-    sendLogin(values){
-	axios({
-	    method: 'post',
-	    url: `${apiUrl}/users/login`,
-	    data: values,
-	    config: { headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}}
-	})
-	    .then(response => {
-		if(response.status === 200){
-		    sessionStorage.setItem('token', response.data.token)
-		} else {
-		    console.log(response)
-		}
-	    })
-	    .catch(response => {
-		console.log(response)
+		toast.error('Oh no! There was a client-side erro!')
 	    })
     }
     sendMessage(values){
+	var componentThis = this
 	var token = sessionStorage.getItem('token')
-        console.log(token)
 	fetch(`${apiUrl}/messages`, {
 	    method: "POST",
 	    headers: {
@@ -196,13 +217,14 @@ class App extends Component {
 	})
 	    .then(response => {
 		if(response.status === 201){
-		    console.log('Message sent successfully')
+		    componentThis.setState({'currentModal': 'none'})
+		    toast.info(`Successfully sent a message to: ${values.toUser}`)
 		} else {
-		    console.log(response.request)
+		    toast.error(`Oh no! There was an error! Error Code: ${response.status}`)
 		}
 	    })
 	    .catch(response => {
-                console.log(response.request)
+                toast.error('Oh no! There was a client-side error!')
 	    })
     }
     componentDidMount(){
@@ -215,7 +237,6 @@ class App extends Component {
 	this.setState({currentModal: "viewMessage"})
     }
     onProductClick (id) {
-	console.log('showing full product with id:' + id)
 	this.setState({currentModal: "product"})
 	clickedProductID = id
     }
@@ -241,11 +262,14 @@ class App extends Component {
     searchForProduct(id){
 	let toReturn = null
 	let items = this.state.products.content
-	items.forEach(function(element) {
-	    if(element.productID === id){
-		toReturn = element
-	    }
+	let found = items.find(function(element){
+	    return element.productID === id
 	})
+	if(found !== undefined){
+	    toReturn = found
+	} else {
+	    toast.error('Something went wrong when trying to find a product...')
+	}
 	return(toReturn)
     }
     searchForMessage(id){
@@ -256,6 +280,8 @@ class App extends Component {
 	})
 	if(found !== undefined){
 	    toReturn = found
+	} else {
+	    toast.error('Something went wrong when trying to find a message...')
 	}
 	return(toReturn)
     }	    
@@ -293,6 +319,7 @@ class App extends Component {
                 <Search onSearchClick={this.onSearch} />
 		<Grid items={this.state.products.content} onProductClick={this.onProductClick} />
                 </div>
+		<ToastContainer autoClose={5000} position="top-center" draggable pauseOnHover/>
                 </div>
 	)
   }
