@@ -1,6 +1,5 @@
 // eslint-disable no-unusued-vars
 import React, { Component } from 'react'
-import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 import './App.css'
@@ -77,7 +76,6 @@ class App extends Component {
 	if(token === null){
 	    return null
 	} else {
-	    var msgData = { content: [] }
 	    console.log(apiUrl)
 	    fetch(`${apiUrl}/messages`, {
 		method: "GET",
@@ -167,17 +165,21 @@ class App extends Component {
 	}
     }
     sendLogin(values){
-	fetch({
-	    method: 'post',
-	    url: `${apiUrl}/users/login`,
-	    data: values,
-	    config: { headers: {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'}}
+	var componentThis = this;
+	fetch(`${apiUrl}/users/login`, {
+	    method: "POST",
+	    headers: {
+		"Content-Type": "application/json; charset=utf-8",
+	    },
+	    body: JSON.stringify(values)
 	})
 	    .then(response => {
 		if(response.status === 200){
-		    sessionStorage.setItem('token', response.data.token)
-		    this.setState({'currentModal': 'none'})
-		    toast.info('Successfully logged in!')
+		    response.json().then(function(data){
+			sessionStorage.setItem('token', data.token)
+			componentThis.setState({'currentModal': 'none'})
+			toast.info('Successfully logged in!')
+		    })
 		} else {
 		    toast.error(`Oh no! There was an error! Error Code: ${response.status}`)
 		}
@@ -187,22 +189,25 @@ class App extends Component {
 	    })
     }
     sendSignUp(values){
-	axios({
-	    method: 'post',
-	    url: `${apiUrl}/users`,
-	    data: values,
-            withCredentials: true,
-	    config: { headers: {'Access-Control-Allow-Origin': '*','Content-Type': 'application/json'}}
+	var componentThis = this;
+	fetch(`${apiUrl}/users`, {
+	    method: "POST",
+	    headers: {
+		"Content-Type": "application/json; charset=utf-8",
+	    },
+	    body: JSON.stringify(values)
 	})
 	    .then(response => {
 		if(response.status === 201){
-		    sessionStorage.setItem('token', response.data.token)
-		    this.setState({'currentModal': 'none'})
-		    toast.info('Successfully signed up!')
+		    response.json().then(function(data){
+			sessionStorage.setItem('token', data.token)
+			componentThis.setState({'currentModal': 'none'})
+			toast.info('Successfully signed up!')
+		    })
 		}
 	    })
 	    .catch(response => {
-		toast.error('Oh no! There was a client-side erro!')
+		toast.error('Oh no! There was a client-side error!')
 	    })
     }
     sendMessage(values){
