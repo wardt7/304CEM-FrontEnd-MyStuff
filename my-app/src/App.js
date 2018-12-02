@@ -27,7 +27,8 @@ class App extends Component {
 		"content": []
 	    }
 	}
-	this.onSearch = this.onSearch.bind(this)
+	this.onSearchProduct = this.onSearchProduct.bind(this)
+	this.onSearchMessage = this.onSearchMessage.bind(this)
 	this.onProductClick = this.onProductClick.bind(this)
 	this.onModalExitClick = this.onModalExitClick.bind(this)
 	this.onSignupClick = this.onSignupClick.bind(this)
@@ -70,14 +71,18 @@ class App extends Component {
 		toast.error('Oh no! There was a client-side error!')
 	    })
     }
-    fetchMessages(){
+    fetchMessages(value){
 	var componentThis = this
 	var token = sessionStorage.getItem('token')
 	if(token === null){
 	    return null
 	} else {
-	    console.log(apiUrl)
-	    fetch(`${apiUrl}/messages`, {
+	    var url = `${apiUrl}/messages/`
+	    var payload = JSON.parse(atob(token.split('.')[1]))
+	    if(value !== null && payload.hasOwnProperty('isAdmin')){
+		url = url + `?toUser=${value}`
+	    }
+	    fetch(url, {
 		method: "GET",
 		headers: {
 		    "Authorization": token
@@ -261,8 +266,11 @@ class App extends Component {
     componentDidMount(){
 	this.fetchProducts(null)
     }
-    onSearch (term) {
+    onSearchProduct (term) {
 	this.fetchProducts(term)
+    }
+    onSearchMessage (term) {
+	this.fetchMessages(term)
     }
     onViewMessageClick(){
 	this.setState({currentModal: "viewMessage"})
@@ -333,7 +341,8 @@ class App extends Component {
 	} else if(this.state.currentModal === "sendMessage"){
 	    currentModal = <Modal type={this.state.currentModal} sendMessage={this.sendMessage} toUser={this.state.toUser} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "viewMessage"){
-	    currentModal = <Modal type={this.state.currentModal} messages={this.state.messages.content} fetchMessages={this.fetchMessages} deleteMessage={this.deleteMessage} onViewIndividualMessage={this.onViewIndividualMessageClick} onModalExitClick={this.onModalExitClick} />
+	    console.log(this.onSearchMessage)
+	    currentModal = <Modal type={this.state.currentModal} messages={this.state.messages.content} fetchMessages={this.fetchMessages} deleteMessage={this.deleteMessage} onViewIndividualMessage={this.onViewIndividualMessageClick} onSearchMessage={this.onSearchMessage} onModalExitClick={this.onModalExitClick} />
 	} else if(this.state.currentModal === "viewIndividualMessage") {
 	    let message = this.searchForMessage(clickedMessageID)
 	    console.log(message)
@@ -349,7 +358,7 @@ class App extends Component {
 		<a href="#default" className="logo">{this.props.title}</a>
                 </div>
                 <div id="Search">
-                <Search onSearchClick={this.onSearch} />
+                <Search onSearchClick={this.onSearchProduct} />
 		<Grid items={this.state.products.content} onProductClick={this.onProductClick} />
                 </div>
 		<ToastContainer autoClose={5000} position="top-center" draggable pauseOnHover/>

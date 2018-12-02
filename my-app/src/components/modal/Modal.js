@@ -34,7 +34,7 @@ class Modal extends Component {
 	} else if(this.props.type === "productUpload"){
 	    content = <ProductUpload sendProductUpload={this.props.sendProductUpload} />
 	} else if(this.props.type === "viewMessage"){
-	    content = <MessageViewGrid messages={this.props.messages} fetchMessages={this.props.fetchMessages} deleteMessage={this.props.deleteMessage} onViewIndividualMessage={this.props.onViewIndividualMessage} />
+	    content = <MessageViewGrid messages={this.props.messages} fetchMessages={this.props.fetchMessages} deleteMessage={this.props.deleteMessage} onViewIndividualMessage={this.props.onViewIndividualMessage} onSearchMessage={this.props.onSearchMessage} />
 	} else if(this.props.type === "viewIndividualMessage"){
 	    content = <MessageViewModal message={this.props.message} deleteMessage={this.props.deleteMessage} onSendMessage={this.props.onSendMessage} onViewMessage={this.props.onViewMessage} />
 	}

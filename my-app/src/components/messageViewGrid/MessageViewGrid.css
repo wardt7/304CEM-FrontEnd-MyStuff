@@ -5,14 +5,23 @@
     margin-right: 0.25em;
     margin-top: 0.25em;
     clear: left;
+    width: 95%;
 }
 
 .messageGrid {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    min-width: 600px;
 }
 
 .messageGrid h1 {
+    margin: auto;
     margin-top: 0;
+}
+
+@media screen and (max-width < 600px){
+    .messageGrid {
+	min-width: 0px;
+    }
 }
