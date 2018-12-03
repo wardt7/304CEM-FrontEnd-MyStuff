@@ -18,9 +18,7 @@ class ProductModal extends Component {
 	// Display a send message button if the user has a token and it isnt their product, and a delete message button if their username matches the author name
 	var token = sessionStorage.getItem('token')
 	if(token === null){
-	    return (
-		    <div></div>
-	    )
+	    return null
 	} else {
 	    var payload = JSON.parse(atob(token.split('.')[1]))
 	    if(payload.username === this.props.product.author){
@@ -28,9 +26,18 @@ class ProductModal extends Component {
 			<button onClick={this.onDeleteProduct}>Delete this product</button>
 		)
 	    } else {
-		return (
-			<button onClick={this.sendMessage}>Send a message to the seller</button>
-		)
+		if(payload.hasOwnProperty('isAdmin')){
+		    return (
+			    <div>
+			    <button onClick={this.onDeleteProduct}>Delete this product</button>
+			    <button onClick={this.sendMessage}>Send a message to the seller</button>
+			    </div>
+		    )
+		} else {
+		    return (
+			    <button onClick={this.sendMessage}>Send a message to the seller</button>
+		    )
+		}
 	    }
 	}
     }
