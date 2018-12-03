@@ -15,15 +15,16 @@ class ProductUpload extends Component {
     render(){
 	let UploadSchema = Yup.object().shape({
 	    product: Yup.mixed().required(),
-	    title: Yup.string().required(),
-	    description: Yup.string().required(),
-	    location: Yup.string().required(),
-	    price: Yup.number().required()
+	    title: Yup.string().required().max(255, 'Title must be less than 256 characters!'),
+	    description: Yup.string().required().max(4096, 'Description must be less than 4097 characters!'),
+	    location: Yup.string().required().max(127, 'Location must be less than 128 characters!'),
+	    price: Yup.number().required().positive('Price must be positive!').max(99999, 'Price must be less than 100,000!')
 	})
 	return (
 		<div className="productUpload">
 		<h1>Product Upload</h1>
 		<Formik initialValues={{product: null, title: '', description: '', location: '', price: 0}} validationSchema={UploadSchema} onSubmit={(values) => {
+		    console.log(values.description)
 		    let bodyFormData = new FormData()
 		    console.log(values.product)
 		    bodyFormData.set('title', values.title)
@@ -34,8 +35,8 @@ class ProductUpload extends Component {
 		    this.submitForm(bodyFormData)
 		}}>
 		{({errors, touched, setFieldValue}) => (
-			<Form className="productUploadForm">
-		        <p>Upload a file</p>
+			<Form className="productUploadForm" id="productUploadFormID">
+		        <p>Image Upload</p>
 		        <input id="file" type="file" name="product" onChange={(event) => {
 			    setFieldValue("product", event.currentTarget.files[0])
 		        }}/>
@@ -48,7 +49,9 @@ class ProductUpload extends Component {
 				<div className="error">{errors.title}</div>
 			) : null}
 		    <p>Description</p>
-			<Field className="entry" type="text" name="description" />
+			<textarea placeholder="Remember, be nice!" rows="10" cols="100" name="description" form="productUploadFormID" onChange={(event) => {
+			    setFieldValue("description", event.currentTarget.value)
+			}}></textarea>
 			{errors.description && touched.description ? (
 				<div className="error">{errors.description}</div>
 			) : null}
@@ -58,7 +61,7 @@ class ProductUpload extends Component {
 				<div className="error">{errors.location}</div>
 			) : null}
 		    <p>Price</p>
-			<Field type="number" name="price" min="0" />
+			<Field type="number" name="price" min="0" max="10000" step="0.01" />
 			{errors.price && touched.price ? (
 				<div className="error">{errors.price}</div>
 			) : null}
