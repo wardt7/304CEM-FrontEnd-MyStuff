@@ -4,15 +4,11 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 
 class MessageSend extends Component {
-    constructor(props){
-	super(props)
-    }
     render(){
 	let MessageSendSchema = Yup.object().shape({
-	    subject: Yup.string().required(),
-	    content: Yup.string().required()
+	    subject: Yup.string().required().max(255, 'Subject must be less than 256 characters long!'),
+	    content: Yup.string().required().max(8192, 'Content must be less than 8192 characters long!')
 	})
-	console.log(this.props.toUser)
 	return (
 		<div className="messageSend">
 		<h1>Send a Message</h1>
@@ -26,11 +22,10 @@ class MessageSend extends Component {
 			subject: values.subject,
 			content: values.content,
 		    }
-		    console.log(newValues)
 		    this.props.sendMessage(newValues)
 		}}>
-		{({errors, touched}) => (
-			<Form>
+		{({errors, touched, setFieldValue}) => (
+			<Form className="messageSendForm" id="messageSendFormID">
 			<p>Sending to: {this.props.toUser}</p>
 			<p>Subject:</p>
 			<Field className="entry" name="subject" type="text"/>
@@ -38,7 +33,10 @@ class MessageSend extends Component {
 				<div className="error">{errors.file}</div>
 			) : null}
 			<p>Message Content</p>
-			<Field className="entry" name="content" type="text"/>
+			<textarea placeholder="Remember, be nice!" rows="10" cols="100" name="content" form="messageSendFormID" onChange={(event) => {
+			    setFieldValue("content", event.currentTarget.value)
+			}}></textarea>
+
 			{ errors.content && touched.content ? (
 				<div className="error">{errors.file}</div>
 			) : null}
