@@ -18,7 +18,9 @@ class ProductModal extends Component {
 	// Display a send message button if the user has a token and it isnt their product, and a delete message button if their username matches the author name
 	var token = sessionStorage.getItem('token')
 	if(token === null){
-	    return null
+	    return (
+		    <p><strong>Sign in to message the seller!</strong></p>
+	    )
 	} else {
 	    var payload = JSON.parse(atob(token.split('.')[1]))
 	    if(payload.username === this.props.product.author){
@@ -44,12 +46,13 @@ class ProductModal extends Component {
     render () {
 	return (
 		<div className="productModal">
-		<p className="productModalName">{this.props.product.title}</p>
+		<h1 className="productModalName">{this.props.product.title}</h1>
 		<img src={this.props.product.links[0].href} alt="No Image Avalable :(" />
-		<p className="productModalDescription">Description: {this.props.product.description}</p>
-		<p className="productModalPrice">Price: £{this.props.product.price}</p>
-		<p className="productModalLocation">Location: {this.props.product.location}</p>
-		<p className="productModalAuthor">Seller: {this.props.product.author}</p>
+		<h2 className="productModalDescription">About this item</h2>
+		<p id="productModalDescriptionContents">{this.props.product.description}</p>
+		<p className="content"><strong>Price: </strong>£{this.props.product.price}</p>
+		<p className="content"><strong>Location: </strong>{this.props.product.location}</p>
+		<p className="content"><strong>Sold by: </strong>{this.props.product.author}</p>
 		{this.checkToken()}
 		</div>
 	)

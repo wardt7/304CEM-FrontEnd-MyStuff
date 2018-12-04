@@ -1,19 +1,31 @@
 .productModal img {
     display: block;
-    margin: 5% auto;
+    margin: 2% auto;
     overflow: hidden;
     max-width: 90%;
     width: auto;
 }
 
 .productModal p {
-    font-size: 1.5em;
+    display: block;
+    font-size: 1.25em;
+    width: 100%;
 }
 
-.productModalName {
+#productModalDescriptionContents {
     display: block;
-    text-align: center;
-    font-weight: bold;
+    text-align: justify;
+    white-space: pre-line;
+    width: 100%;
+}
+
+.productModal button {
+    display: block;
+    margin: auto;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding: 0.25em;
+    font-size: 1.25em;
 }
 
 
