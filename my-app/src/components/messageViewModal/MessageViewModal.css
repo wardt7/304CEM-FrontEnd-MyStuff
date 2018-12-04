@@ -1,0 +1,19 @@
+#messageContent {
+    font-size: 1.25em;
+    text-align: justify;
+    white-space: pre-line;
+}
+
+.messageViewModal button {
+    margin: 0.25em;
+    padding: 0.25em;
+    font-size: 1.25em;
+}
+
+@media screen and (max-width < 800px){
+    .messageViewModal button {
+	display: block;
+	text-align: center;
+    }
+}
+

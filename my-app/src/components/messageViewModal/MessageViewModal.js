@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import './MessageViewModal'
+import './MessageViewModal.css'
 
 class MessageViewModal extends Component{
     constructor(props){
@@ -20,9 +20,9 @@ class MessageViewModal extends Component{
     render(){
 	return(
 		<div className="messageViewModal">
-		<h1>Subject: {this.props.message.subject}</h1>
-		<h2>From: {this.props.message.fromUser}</h2>
-		<p>{this.props.message.content}</p>
+		<h1>{this.props.message.subject}</h1>
+		<h2>Sent by {this.props.message.fromUser}</h2>
+		<p id="messageContent">{this.props.message.content}</p>
 		<button onClick={this.sendMessage}>Send a reply</button>
 		<button onClick={this.viewMessages}>Go back</button>
 		<button onClick={this.deleteMessage}>Delete Message</button>
