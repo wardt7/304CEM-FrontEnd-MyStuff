@@ -1,9 +1,19 @@
+/**
+ * Module for creating a signup page
+ * @module components/signup
+ */
+
 import React, { Component } from 'react'
 import './Signup.css'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 
 class Signup extends Component {
+    /**
+     * Renders the signup form
+     * @param {function} props.onSignup - The API function for sending the signup data
+     * @returns {Object} JSX
+     */
     render(){
 	let SignupSchema = Yup.object().shape({
 	    email: Yup.string().email('Invalid email').required('Required'),

@@ -1,16 +1,33 @@
+/**
+ * Module for creating a product upload form
+ * @module components/productUpload
+ */
+
 import React, { Component } from 'react'
 import './ProductUpload.css'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 
 class ProductUpload extends Component {
+    /**
+     * Function for binding the submitForm function to this component
+     * @constructor
+     */
     constructor(props){
 	super(props)
 	this.submitForm = this.submitForm.bind(this)
     }
+    /**
+     * Wrapper function for sending product upload values to the API
+     * @param {Object} values - The values to be sent to the API
+     */
     submitForm(values){
 	this.props.sendProductUpload(values)
     }
+    /**
+     * Function for rendering the product upload form
+     * @returns {Object} JSX
+     */
     render(){
 	let UploadSchema = Yup.object().shape({
 	    product: Yup.mixed().required(),

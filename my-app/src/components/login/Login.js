@@ -1,9 +1,19 @@
+/**
+ * Component for creating a login form
+ * @module components/login
+ */
+
 import React, { Component } from 'react'
 import './Login.css'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 
 class Login extends Component {
+    /** 
+     * Renders the login form
+     * @param {function} props.onLogin - The API Function for logging in.
+     * @returns {Object} JSX
+     */
     render(){
 	let LoginSchema = Yup.object().shape({
 	    username: Yup.string().required('Required'),
