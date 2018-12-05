@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './ProductUpload.css'
-import axios from 'axios'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 

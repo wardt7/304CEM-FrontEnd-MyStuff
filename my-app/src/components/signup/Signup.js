@@ -4,9 +4,6 @@ import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 
 class Signup extends Component {
-    constructor(props){
-	super(props)
-    }
     render(){
 	let SignupSchema = Yup.object().shape({
 	    email: Yup.string().email('Invalid email').required('Required'),
