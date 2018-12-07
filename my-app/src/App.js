@@ -25,7 +25,8 @@ class App extends Component {
      * initialising the state
      * @constructor
      */
-    constructor(){
+    constructor(props){
+	super(props)
 	this.state = {
 	    currentModal: "none",
 	    toUser: null,
