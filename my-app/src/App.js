@@ -124,7 +124,6 @@ class App extends Component {
 		    toast.error('Oh no! There was a client-side error!')
 		})
 	}
-	console.log(this.state)
     }
     /**
      * API Function for deleting messages from the API and updating the state
@@ -315,7 +314,6 @@ class App extends Component {
 		}
 	    })
 	    .catch(function (response) {
-		console.log(response)
 		toast.error('Oh no! There was a client-side error!')
 	    })
     }

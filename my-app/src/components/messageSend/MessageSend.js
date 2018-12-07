@@ -25,7 +25,6 @@ class MessageSend extends Component {
 		<div className="messageSend">
 		<h1>Send a Message</h1>
 		<Formik initialValues={{subject: '', content: ''}} validationSchema={MessageSendSchema} onSubmit={(values) => {
-		    console.log(values)
 		    var token = sessionStorage.getItem('token')
 		    var payload = JSON.parse(atob(token.split('.')[1]))
 		    var newValues = {

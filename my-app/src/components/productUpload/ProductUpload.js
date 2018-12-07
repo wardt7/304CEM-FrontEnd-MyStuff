@@ -40,9 +40,7 @@ class ProductUpload extends Component {
 		<div className="productUpload">
 		<h1>Product Upload</h1>
 		<Formik initialValues={{product: null, title: '', description: '', location: '', price: 0}} validationSchema={UploadSchema} onSubmit={(values) => {
-		    console.log(values.description)
 		    let bodyFormData = new FormData()
-		    console.log(values.product)
 		    bodyFormData.set('title', values.title)
 		    bodyFormData.set('description', values.description)
 		    bodyFormData.set('location', values.location)
