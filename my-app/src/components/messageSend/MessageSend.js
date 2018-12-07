@@ -1,9 +1,21 @@
+/**
+ * Component for displaying a form for sending a message to a specific user
+ * @module components/messageSend
+ */
+
 import React, { Component } from 'react'
 import './MessageSend.css'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 
 class MessageSend extends Component {
+    /**
+     * Function for rendering the send message form
+     * @param {string} token - The token from Session Storage
+     * @param {string} props.toUser - The recipient of the message
+     * @param {function} props.sendMessage - The function that calls the API, using the data from the form as the values to send
+     * @returns {Object} JSX
+     */
     render(){
 	let MessageSendSchema = Yup.object().shape({
 	    subject: Yup.string().required().max(255, 'Subject must be less than 256 characters long!'),

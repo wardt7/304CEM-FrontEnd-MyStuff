@@ -1,3 +1,8 @@
+/**
+ * Parent module for running the MyStuff website
+ * @module App
+ */
+
 // eslint-disable no-unusued-vars
 import React, { Component } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
@@ -15,8 +20,12 @@ var clickedMessageID = null
 var apiUrl = 'http://localhost:8080'
 
 class App extends Component {
-    constructor(props){
-	super(props)
+    /**
+     * Constructor for binding functions to this module and for
+     * initialising the state
+     * @constructor
+     */
+    constructor(){
 	this.state = {
 	    currentModal: "none",
 	    toUser: null,
@@ -46,6 +55,12 @@ class App extends Component {
 	this.sendMessage = this.sendMessage.bind(this)
 	this.sendProductUpload = this.sendProductUpload.bind(this)
     }
+    /**
+     * API Function for obtaining products from the API and putting them into the
+     * state.
+     * @param {string|null} value - If requested, the title of the product to search for
+     * @returns {Object} JSON
+     */
     fetchProducts(value){
 	var url = `${apiUrl}/products/`
 	if(value !== null){
@@ -62,8 +77,6 @@ class App extends Component {
 			componentThis.setState({products: data})
 		    })
 		} else {
-		    console.log(response.status)
-		    console.log(response)
 		    toast.error(`Oh no! There was an error! Error Code: ${response.status}`)
 		}
 	    })
@@ -71,6 +84,14 @@ class App extends Component {
 		toast.error('Oh no! There was a client-side error!')
 	    })
     }
+    /**
+     * API Function for obtaining messages from the API and putting them into the
+     * state.
+     * @param {string|null} value - If requested, the user whose messages are to be searched for. Should only be
+     * accessed by an admin
+     * @param {string|null} token - The token obtained from session storage
+     * @returns {Object} JSON
+     */
     fetchMessages(value){
 	var componentThis = this
 	var token = sessionStorage.getItem('token')
@@ -78,6 +99,7 @@ class App extends Component {
 	    return null
 	} else {
 	    var url = `${apiUrl}/messages/`
+	    // Only permit admins to search for other user's messages
 	    var payload = JSON.parse(atob(token.split('.')[1]))
 	    if(value !== null && payload.hasOwnProperty('isAdmin')){
 		url = url + `?toUser=${value}`
@@ -103,6 +125,12 @@ class App extends Component {
 	}
 	console.log(this.state)
     }
+    /**
+     * API Function for deleting messages from the API and updating the state
+     * @param {string} id - The ID of the message to be deleted
+     * @param {string|null} token - The token of the logged in user
+     * @returns {Object} JSON
+     */
     deleteMessage(id){
 	var componentThis = this
 	var token = sessionStorage.getItem('token')
@@ -136,6 +164,12 @@ class App extends Component {
 		})
 	}
     }
+    /**
+     * API Function for deleting products from the API and updating the state
+     * @param {string} id - The ID of the product to be deleted
+     * @param {string|null} token - The token of the logged in user
+     * @returns {Object} JSON
+     */
     deleteProduct(id){
 	var componentThis = this
 	var token = sessionStorage.getItem('token')
@@ -169,6 +203,11 @@ class App extends Component {
 		})
 	}
     }
+    /**
+     * API Function for logging a user in.
+     * @param {Object} values - The login values to be sent to the API. Should contain username and password.
+     * @returns {Object} JSON - Token should be stored in session storage
+     */
     sendLogin(values){
 	var componentThis = this;
 	fetch(`${apiUrl}/users/login`, {
@@ -193,6 +232,11 @@ class App extends Component {
 		toast.error('Oh no! There was a client-side error!')
 	    })
     }
+    /**
+     * API Function for signing up a user
+     * @param {Object} values - The values to be sent to the API. Should contain email, username, password and rePassword.
+     * @returns {Object} JSON - Token should be stored in session storage
+     */
     sendSignUp(values){
 	var componentThis = this;
 	fetch(`${apiUrl}/users`, {
@@ -215,6 +259,12 @@ class App extends Component {
 		toast.error('Oh no! There was a client-side error!')
 	    })
     }
+    /**
+     * API Function for sending a message
+     * @param {Object} values - The  values to be sent to the API. Should contain toUser, subject and content.
+     * @param {string|null} token - The token of the logged in user
+     * @returns {Object} JSON
+     */
     sendMessage(values){
 	var componentThis = this
 	var token = sessionStorage.getItem('token')
@@ -238,8 +288,13 @@ class App extends Component {
                 toast.error('Oh no! There was a client-side error!')
 	    })
     }
+    /**
+     * API Function for uploading a product
+     * @param {Object} values - The login values to be sent to the API. Should contain title, description, product, price, and location
+     * @param {string|null} token - The token of the logged in user
+     * @returns {Object} JSON
+     */
     sendProductUpload(values){
-	console.log(values)
 	var componentThis = this;
 	var token = sessionStorage.getItem('token')
 	fetch(`${apiUrl}/products`,{
@@ -263,41 +318,84 @@ class App extends Component {
 		toast.error('Oh no! There was a client-side error!')
 	    })
     }
+    /**
+     * Wrapper function for calling fetchProducts when starting up the website
+     */
     componentDidMount(){
 	this.fetchProducts(null)
     }
+    /**
+     * Wrapper function for calling fetchProducts with a search term
+     * @param {string} term
+     */
     onSearchProduct (term) {
 	this.fetchProducts(term)
     }
+    /**
+     * Wrapper function for calling fetchMessages with a search term
+     * @param {string} term
+     */
     onSearchMessage (term) {
 	this.fetchMessages(term)
     }
+    /**
+     * Function for displaying the viewMessage modal
+     */
     onViewMessageClick(){
 	this.setState({currentModal: "viewMessage"})
     }
+    /**
+     * Function for displaying the product modal
+     * @param {string} id - The ID of the product to display
+     */
     onProductClick (id) {
 	this.setState({currentModal: "product"})
 	clickedProductID = id
     }
+    /**
+     * Function for displaying the viewIndividualMessage modal
+     * @param {string} id - The ID of the message to display
+     */
     onViewIndividualMessageClick (id) {
 	this.setState({currentModal: "viewIndividualMessage"})
 	clickedMessageID = id
     }
+    /**
+     * Function for displaying the productUpload modal
+     */
     onProductUploadClick(){
 	this.setState({currentModal: "productUpload"})
     }
+    /**
+     * Function for displaying the signup modal
+     */
     onSignupClick(){
 	this.setState({currentModal: "signup"})
     }
+    /**
+     * Function for displaying the login modal
+     */
     onLoginClick(){
 	this.setState({currentModal: "login"})
     }
+    /**
+     * Function for displaying no modal
+     */
     onModalExitClick(){
 	this.setState({currentModal: "none"})
     }
+    /**
+     * Function for displaying the sendMessage modal
+     * @param {string} toSendTo - The recipient of the message
+     */
     onSendMessageClick(toSendTo){
 	this.setState({currentModal: "sendMessage", toUser: toSendTo})
     }
+    /**
+     * Function for searching for a product in the state
+     * @param {string} id - The ID of the product
+     * @returns {Object} product
+     */
     searchForProduct(id){
 	let toReturn = null
 	let items = this.state.products.content
@@ -311,6 +409,11 @@ class App extends Component {
 	}
 	return(toReturn)
     }
+    /**
+     * Function for searching for a message in the state
+     * @param {string} id - The ID of the message
+     * @returns {Object} message
+     */
     searchForMessage(id){
 	let toReturn = null
 	let items = this.state.messages.content
@@ -323,8 +426,13 @@ class App extends Component {
 	    toast.error('Something went wrong when trying to find a message...')
 	}
 	return(toReturn)
-    }	    
+    }
+    /**
+     * Function for rendering the SPA
+     * @returns {Object} JSX
+     */
     render () {
+	// Handle which modal we're going to display. See components/modal for more informaion
 	let currentModal
 	if(this.state.currentModal === "none"){
 	    // no modal so we just shove in a div
@@ -341,11 +449,9 @@ class App extends Component {
 	} else if(this.state.currentModal === "sendMessage"){
 	    currentModal = <Modal type={this.state.currentModal} sendMessage={this.sendMessage} toUser={this.state.toUser} onModalExitClick={this.onModalExitClick}/>
 	} else if(this.state.currentModal === "viewMessage"){
-	    console.log(this.onSearchMessage)
 	    currentModal = <Modal type={this.state.currentModal} messages={this.state.messages.content} fetchMessages={this.fetchMessages} deleteMessage={this.deleteMessage} onViewIndividualMessage={this.onViewIndividualMessageClick} onSearchMessage={this.onSearchMessage} onModalExitClick={this.onModalExitClick} />
 	} else if(this.state.currentModal === "viewIndividualMessage") {
 	    let message = this.searchForMessage(clickedMessageID)
-	    console.log(message)
 	    currentModal = <Modal type={this.state.currentModal} message={message} deleteMessage={this.deleteMessage} onSendMessage={this.onSendMessageClick} onViewMessage={this.onViewMessageClick} onModalExitClick={this.onModalExitClick}/>
 	} else {
 	    currentModal = <Modal type={this.state.currentModal} onModalExitClick={this.onModalExitClick}/>

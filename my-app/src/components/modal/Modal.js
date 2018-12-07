@@ -1,3 +1,8 @@
+/**
+ * Component for displaying other components in a modal
+ * @module components/modal
+ */
+
 import React, { Component } from 'react'
 import './Modal.css'
 import ProductModal from '../productModal/ProductModal'
@@ -9,18 +14,35 @@ import MessageViewGrid from '../messageViewGrid/MessageViewGrid'
 import MessageViewModal from '../messageViewModal/MessageViewModal'
 
 class Modal extends Component {
+    /**
+     * Constructor for binding functions to the component
+     * @constructor
+     */
     constructor(props){
 	super(props)
 	this.handleModalExitClick = this.handleModalExitClick.bind(this)
 	this.handleModalContentClick = this.handleModalContentClick.bind(this)
     }
+    /**
+     * Wrapper function for handling the exit click
+     * @param {function} props.onModalExitClick - Function for shutting the modal
+     */
     handleModalExitClick(event){
 	this.props.onModalExitClick()
     }
+    /**
+     * Function for preventing shutting the modal when clicking inside the modal
+     * @param {Object} event - the event object created by the click
+     */
     handleModalContentClick(event){
 	event.stopPropagation()
 	return null
     }
+    /**
+     * Function for rendering the modal
+     * See other components for what parameters they pass; This component forwards on their required props.
+     * @returns {Object} JSX
+     */
     render () {
 	let content = null;
 	if(this.props.type === "product"){
