@@ -28,8 +28,12 @@ class MessageViewGrid extends Component {
      * @returns {Object} JSX
      */
     messageGridRow(cards){
-	if(cards === null){
-	    return null
+	if(cards.length === 0){
+	    return(
+		    <div>
+		    <h2>No messages to show...</h2>
+		    </div>
+	    )
 	}
 	return(
 		<div>

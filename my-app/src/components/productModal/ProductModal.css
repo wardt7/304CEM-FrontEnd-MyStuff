@@ -14,7 +14,7 @@
 
 #productModalDescriptionContents {
     display: block;
-    text-align: justify;
+    text-align: center;
     white-space: pre-line;
     width: 100%;
 }

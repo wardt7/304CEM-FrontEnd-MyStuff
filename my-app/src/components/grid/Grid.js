@@ -23,9 +23,11 @@ class Grid extends Component {
      * @returns {Object} JSX
      */
     GridRow(cards){
-	if(cards == null){
+	if(cards.length === 0){
 	    return (
-		    <h1>No Products to Show...</h1>
+		    <div>
+		    <h2>No Products to Show...</h2>
+		    </div>
 	    )
 	}
 	return(
