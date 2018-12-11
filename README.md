@@ -1,4 +1,6 @@
 # 304CEM-Front-MyStuff
 The front end for the MyStuff classified ads website.
 
-Will use react.js for pretty stuff along with HTML and CSS.
+To run, run "npm install" in the my-app folder to ensure all dependencies
+are installed.
+Then, run "npm start"
